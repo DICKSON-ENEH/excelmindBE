@@ -17,6 +17,6 @@ import { User } from 'src/utils/types';
   ],
   providers: [UsersService],
   controllers: [UsersController], // if you have a controller
-  exports: [UsersService], // export if needed in AuthModule, etc.
+  exports: [UsersService], 
 })
 export class UsersModule {}

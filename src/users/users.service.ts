@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { CreateUserDto } from './userDto';
+import { UserEntity } from './user.entity';
 import { User } from 'src/utils/types';
 import { UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -17,7 +17,7 @@ export class UsersService {
     private readonly jwtService: JwtService, 
   ) {}
 
-async createUser(payload: CreateUserDto): Promise<{ message: string; data: User }> {
+async createUser(payload: UserEntity): Promise<{ message: string; data: User }> {
   const hashedPassword = await bcrypt.hash(payload.password, 10);
   const newUser = this.userRepository.create({
     ...payload,
@@ -25,7 +25,7 @@ async createUser(payload: CreateUserDto): Promise<{ message: string; data: User 
   });
   const savedUser = await this.userRepository.save(newUser);
 
-  // Optionally remove password before returning
+
   delete savedUser.password;
 
   return {

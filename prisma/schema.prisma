@@ -16,12 +16,30 @@ datasource db {
 
 
 model User {
-  id    Int     @default(autoincrement()) @id
-  email String  @unique
-  password  String
-  name  String
-  role String
+  id       Int      @id @default(autoincrement())
+  email    String   @unique
+  password String
+  name     String
+  role     String
+
+  courses  Course[] @relation("LecturerCourses") 
 }
 
+enum CourseStatus {
+  APPROVED
+  DECLINED
+  PENDING
+}
 
+model Course {
+  id         Int          @id @default(autoincrement())
+  title      String
+  credits    Int
+  lecturerId Int
+  syllabus   String?
+
+  status     CourseStatus @default(PENDING)
+
+  lecturer   User         @relation("LecturerCourses", fields: [lecturerId], references: [id])
+}
 
