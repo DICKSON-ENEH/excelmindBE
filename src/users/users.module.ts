@@ -8,11 +8,15 @@ import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([UserEntity]), // <-- This is key
-    JwtModule.register({}), // configure this if not already configured globally
+    TypeOrmModule.forFeature([UserEntity]),
+    JwtModule.register({
+      secret: 'super-secret-key', 
+      signOptions: { expiresIn: '1h' },
+    }),
   ],
   controllers: [UsersController],
   providers: [UsersService],
   exports: [UsersService],
 })
 export class UsersModule {}
+
