@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
@@ -12,25 +12,34 @@ import { JwtService } from '@nestjs/jwt';
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
+    @InjectRepository(UserEntity)
+    private readonly userRepository: Repository<UserEntity>,
     private readonly jwtService: JwtService, 
   ) {}
 
-async createUser(payload: UserEntity): Promise<{ message: string; data: User }> {
+async createUser(payload: UserEntity): Promise<{ message: string; data: Partial<UserEntity> }> {
+  const existingUser = await this.userRepository.findOne({ where: { email: payload.email } });
+
+  if (existingUser) {
+    throw new ConflictException('Email already exists');
+  }
+
   const hashedPassword = await bcrypt.hash(payload.password, 10);
   const newUser = this.userRepository.create({
     ...payload,
     password: hashedPassword,
   });
+
   const savedUser = await this.userRepository.save(newUser);
-
-
-  delete savedUser.password;
 
   return {
     message: 'User created successfully',
-    data: savedUser,
+    data: {
+      id: savedUser.id,
+      name: savedUser.name,
+      email: savedUser.email,
+      role: savedUser.role,
+    },
   };
 }
 
@@ -38,7 +47,7 @@ async createUser(payload: UserEntity): Promise<{ message: string; data: User }> 
     return this.userRepository.findOne({ where: { email } });
   }
 
-async login(email: string, password: string): Promise<{ message: string; data: User; token: string }> {
+async login(email: string, password: string): Promise<{ message: string; data: Partial<UserEntity>; token: string }> {
   const user = await this.findByEmail(email);
   if (!user) throw new UnauthorizedException('Invalid credentials');
 
@@ -48,14 +57,16 @@ async login(email: string, password: string): Promise<{ message: string; data: U
   const payload = { sub: user.id, email: user.email, role: user.role };
   const token = this.jwtService.sign(payload);
 
-  delete user.password;
+  const { password: _, ...userWithoutPassword } = user;
 
   return {
     message: 'Login successful',
-    data: user,
+    data: userWithoutPassword,
     token,
   };
 }
+
+
 
 }
 
