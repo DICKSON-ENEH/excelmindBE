@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { Enrollment, EnrollmentStatus } from './enrollment.entity';
 import { Course } from 'src/course/course.entity';
 import { UserEntity } from 'src/users/user.entity';
@@ -54,23 +54,32 @@ export class EnrollmentService {
     });
   }
 
-  async approve(enrollmentId: string): Promise<{ message: string }> {
-    const enrollment = await this.enrollmentRepo.findOne({ where: { id: enrollmentId } });
-    if (!enrollment) throw new NotFoundException('Enrollment not found');
+async approve(enrollmentId: string, userId: string): Promise<{ message: string }> {
+  const user = await this.userRepo.findOne({ where: { id: userId } });
+  if (!user) throw new NotFoundException('User not found');
+  if (user.role !== 'admin') throw new ForbiddenException('Access denied: Admins only');
 
-    enrollment.status = EnrollmentStatus.APPROVED;
-    await this.enrollmentRepo.save(enrollment);
+  const enrollment = await this.enrollmentRepo.findOne({ where: { id: enrollmentId } });
+  if (!enrollment) throw new NotFoundException('Enrollment not found');
 
-    return { message: 'Enrollment approved' };
-  }
+  enrollment.status = EnrollmentStatus.APPROVED;
+  await this.enrollmentRepo.save(enrollment);
 
-  async reject(enrollmentId: string): Promise<{ message: string }> {
-    const enrollment = await this.enrollmentRepo.findOne({ where: { id: enrollmentId } });
-    if (!enrollment) throw new NotFoundException('Enrollment not found');
+  return { message: 'Enrollment approved' };
+} 
 
-    enrollment.status = EnrollmentStatus.REJECTED;
-    await this.enrollmentRepo.save(enrollment);
+async reject(enrollmentId: string, userId: string): Promise<{ message: string }> {
+  const user = await this.userRepo.findOne({ where: { id: userId } });
+  if (!user) throw new NotFoundException('User not found');
+  if (user.role !== 'admin') throw new ForbiddenException('Access denied: Admins only');
 
-    return { message: 'Enrollment rejected' };
-  }
+  const enrollment = await this.enrollmentRepo.findOne({ where: { id: enrollmentId } });
+  if (!enrollment) throw new NotFoundException('Enrollment not found');
+
+  enrollment.status = EnrollmentStatus.REJECTED;
+  await this.enrollmentRepo.save(enrollment);
+
+  return { message: 'Enrollment rejected' };
+}
+
 }

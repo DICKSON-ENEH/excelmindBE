@@ -13,6 +13,10 @@ import { EnrollmentService } from './enrollment/enrollment.service';
 import { EnrollmentController } from './enrollment/enrollment.controller';
 import { EnrollmentModule } from './enrollment/enrollment.module';
 import { Enrollment } from './enrollment/enrollment.entity';
+import { AssignmentService } from './assignment/assignment.service';
+import { AssignmentController } from './assignment/assignment.controller';
+import { AssignmentModule } from './assignment/assignment.module';
+import { Assignment } from './assignment/assignment.entity';
 
 
 @Module({
@@ -31,12 +35,13 @@ import { Enrollment } from './enrollment/enrollment.entity';
     },
 
   },
-      entities: [Course, UserEntity, Enrollment],
+      entities: [Course, UserEntity, Enrollment, Assignment],
       synchronize: true,
     }),
     UsersModule,
     CourseModule,
     EnrollmentModule,
+    AssignmentModule,
   ],
   controllers: [AppController], 
   providers: [AppService],      

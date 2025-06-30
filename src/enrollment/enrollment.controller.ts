@@ -1,6 +1,10 @@
-import { Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import { Controller, Delete, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { EnrollmentService } from './enrollment.service';
+import { Role } from 'src/roles/roles.decorator';
+import { JwtAuthGuard } from 'src/users/jwt.guard';
+import { RolesGuard } from 'src/roles/roles.guard';
 @Controller('enrollments')
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class EnrollmentController {
   constructor(private readonly enrollmentService: EnrollmentService) {}
 
@@ -25,14 +29,21 @@ export class EnrollmentController {
     return this.enrollmentService.getStudentEnrollments(studentId);
   }
 
-  @Post(':id/approve')
-  approve(@Param('id') enrollmentId: string) {
-    return this.enrollmentService.approve(enrollmentId);
-  }
+@Post(':enrollmentId/approve/:userId')
+approve(
+  @Param('enrollmentId') enrollmentId: string,
+  @Param('userId') userId: string,
+) {
+  return this.enrollmentService.approve(enrollmentId, userId);
+}
 
-  @Post(':id/reject')
-  reject(@Param('id') enrollmentId: string) {
-    return this.enrollmentService.reject(enrollmentId);
-  }
+@Post(':enrollmentId/reject/:userId')
+reject(
+  @Param('enrollmentId') enrollmentId: string,
+  @Param('userId') userId: string,
+) {
+  return this.enrollmentService.reject(enrollmentId, userId);
+}
+
 }
 

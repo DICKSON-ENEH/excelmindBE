@@ -1,6 +1,7 @@
 import { Course } from 'src/course/course.entity';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToMany } from 'typeorm';
 import { Enrollment } from 'src/enrollment/enrollment.entity'; // <- make sure this is imported
+import { Assignment } from 'src/assignment/assignment.entity';
 
 @Entity()
 export class UserEntity {
@@ -23,6 +24,8 @@ export class UserEntity {
   courses: Course[];
 
 
+@OneToMany(() => Assignment, (assignment) => assignment.student)
+assignments: Assignment[];
 
   @OneToMany(() => Enrollment, (enrollment) => enrollment.student) // <-- add this
   enrollments: Enrollment[];
