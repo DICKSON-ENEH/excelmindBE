@@ -9,6 +9,10 @@ import { CourseController } from './course/course.controller';
 import { CourseModule } from './course/course.module';
 import { Course } from './course/course.entity';
 import { UserEntity } from './users/user.entity';
+import { EnrollmentService } from './enrollment/enrollment.service';
+import { EnrollmentController } from './enrollment/enrollment.controller';
+import { EnrollmentModule } from './enrollment/enrollment.module';
+import { Enrollment } from './enrollment/enrollment.entity';
 
 
 @Module({
@@ -27,11 +31,12 @@ import { UserEntity } from './users/user.entity';
     },
 
   },
-      entities: [Course, UserEntity],
+      entities: [Course, UserEntity, Enrollment],
       synchronize: true,
     }),
     UsersModule,
     CourseModule,
+    EnrollmentModule,
   ],
   controllers: [AppController], 
   providers: [AppService],      

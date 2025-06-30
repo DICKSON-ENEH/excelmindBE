@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Course, CourseStatus } from './course.entity';
+import { Course } from './course.entity';
 import { Repository } from 'typeorm';
 import { CreateCourseDto, UpdateCourseDto } from './courses.dto';
 import { UserEntity } from 'src/users/user.entity'; // actual entity, not DTO

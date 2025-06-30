@@ -1,12 +1,6 @@
-import {  UserEntity } from 'src/users/user.entity';
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinTable } from 'typeorm';
-
-
-export enum CourseStatus {
-  APPROVED = 'approved',
-  DECLINED = 'declined',
-  PENDING = 'pending', 
-}
+import { UserEntity } from 'src/users/user.entity';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
+import { Enrollment } from 'src/enrollment/enrollment.entity'; // <-- import this!
 
 @Entity()
 export class Course {
@@ -22,26 +16,9 @@ export class Course {
   @Column({ nullable: true })
   syllabus: string;
 
-    @Column({
-    type: 'enum',
-    enum: CourseStatus,
-    default: CourseStatus.PENDING, 
-  })
+  @ManyToOne(() => UserEntity, (user) => user.courses)
+  lecturer: UserEntity;
 
- 
-
-
-
-@JoinTable()
-enrolledStudents: UserEntity[];
-
-@ManyToOne(() => UserEntity, (user) => user.courses)
-lecturer: UserEntity;
-
-@Column({
-  type: 'enum',
-  enum: CourseStatus,
-  default: CourseStatus.PENDING,
-})
-status: CourseStatus;
+  @OneToMany(() => Enrollment, (enrollment) => enrollment.course)
+  enrollments: Enrollment[]; // <-- Add this line!
 }
