@@ -16,7 +16,7 @@ export class UserEntity {
   @Column()
   name: string;
 
-  @Column()
+  @Column() 
   role: string;
 
   @OneToMany(() => Course, (course) => course.lecturer)
@@ -26,3 +26,5 @@ export class UserEntity {
 @ManyToMany(() => Course, (course) => course.enrolledStudents)
 enrolledCourses: Course[];
 }
+
+// 016df516-5ff3-443b-85bc-008e33c5ece4

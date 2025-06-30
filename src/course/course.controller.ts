@@ -7,11 +7,12 @@ import { Course } from './course.entity';
 export class CourseController {
   constructor(private readonly courseService: CourseService) {} 
 
-  @Post('create')
-  async create(@Body() dto: CreateCourseDto): Promise<Course> {
-    return this.courseService.createCourse(dto);
-  }
+@Post('create')
+async create(@Body() dto: CreateCourseDto): Promise<{ message: string }> {
+  return this.courseService.createCourse(dto);
+}
 
+ 
   @Put('update/:id')
   async update(@Param('id') id: string, @Body() dto: UpdateCourseDto): Promise<Course> {
     return this.courseService.updateCourse(id, dto);
@@ -21,34 +22,12 @@ export class CourseController {
 browseCourses(): Promise<Course[]> {
   return this.courseService.browseCourses();
 }
-
-@Post(':id/enroll/:studentId')
-enroll(@Param('id') courseId: string, @Param('studentId') studentId: string): Promise<Course> {
-  return this.courseService.enroll(courseId, studentId);
+ 
+@Get('lecturer/:id/courses')
+async getLecturerCourses(@Param('id') lecturerId: string): Promise<Course[]> {
+  return this.courseService.browseLecturerCourses(lecturerId);
 }
 
-@Post(':id/drop/:studentId')
-drop(@Param('id') courseId: string, @Param('studentId') studentId: string): Promise<Course> {
-  return this.courseService.drop(courseId, studentId);
-}
 
-// Admin actions
-@Post(':id/approve')
-approve(@Param('id') courseId: string): Promise<Course> {
-  return this.courseService.approveEnrollment(courseId);
-}
-
-@Post(':id/reject')
-reject(@Param('id') courseId: string): Promise<Course> {
-  return this.courseService.rejectEnrollment(courseId);
-}
-
-@Post(':id/assign/:lecturerId')
-assignLecturer(
-  @Param('id') courseId: string,
-  @Param('lecturerId') lecturerId: string,
-): Promise<Course> {
-  return this.courseService.assignLecturer(courseId, lecturerId);
-}
 
 }

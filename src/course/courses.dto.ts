@@ -1,4 +1,4 @@
-import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString , IsUUID} from 'class-validator';
 import { CourseStatus } from './course.entity';
 
 export class CreateCourseDto {
@@ -37,4 +37,8 @@ export class UpdateCourseDto {
   @IsOptional()
   @IsEnum(CourseStatus)
   status?: CourseStatus;
+
+  @IsOptional()
+  @IsUUID() // or @IsInt() if you're using integer IDs
+  lecturerId?: string;
 }
