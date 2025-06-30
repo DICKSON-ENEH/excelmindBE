@@ -29,6 +29,10 @@ async createUser(@Body() createUserDto: UserEntity): Promise<{ message: string; 
   ): Promise<{ message: string; data: Partial<UserDto>; token: string }> {
     return this.usersService.login(credentials.email, credentials.password);
   }
+@Get("all-users")
+async getAll(): Promise<UserEntity[]> {
+  return this.usersService.getAllUsers();
+}
 
 
   @Get('find-by-email')

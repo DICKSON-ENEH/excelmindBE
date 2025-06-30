@@ -39,13 +39,19 @@ async createUser(payload: UserEntity): Promise<{ message: string; data: Partial<
       name: savedUser.name,
       email: savedUser.email,
       role: savedUser.role,
-    },
+    }, 
   };
 }
 
   async findByEmail(email: string): Promise<User | null> {
     return this.userRepository.findOne({ where: { email } });
   }
+
+
+  async getAllUsers(): Promise<UserEntity[]> {
+  return this.userRepository.find();
+}
+
 
 async login(email: string, password: string): Promise<{ message: string; data: Partial<UserEntity>; token: string }> {
   const user = await this.findByEmail(email);

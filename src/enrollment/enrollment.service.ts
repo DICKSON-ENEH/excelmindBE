@@ -54,6 +54,13 @@ export class EnrollmentService {
     });
   }
 
+  async getAllEnrollments(): Promise<Enrollment[]> {
+  return this.enrollmentRepo.find({
+    relations: ['student', 'course', 'course.lecturer'],
+  });
+}
+
+
 async approve(enrollmentId: string, userId: string): Promise<{ message: string }> {
   const user = await this.userRepo.findOne({ where: { id: userId } });
   if (!user) throw new NotFoundException('User not found');

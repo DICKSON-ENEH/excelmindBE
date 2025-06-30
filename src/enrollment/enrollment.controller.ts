@@ -28,6 +28,10 @@ export class EnrollmentController {
   getStudentEnrollments(@Param('studentId') studentId: string) {
     return this.enrollmentService.getStudentEnrollments(studentId);
   }
+@Get('all-enrollments')
+getAll() {
+  return this.enrollmentService.getAllEnrollments();
+}
 
 @Post(':enrollmentId/approve/:userId')
 approve(
