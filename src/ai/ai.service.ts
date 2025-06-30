@@ -1,18 +1,23 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import OpenAI from 'openai';
 
 @Injectable()
 export class AiService {
   private openai: OpenAI;
+  private useMock: boolean;
 
-  constructor() {
+  constructor(private configService: ConfigService) {
+    const openAIKEY = this.configService.get<string>('OPENAI');
+    this.useMock = this.configService.get<string>('USE_MOCK_AI') === 'true';
+
     this.openai = new OpenAI({
-      apiKey: "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", 
+      apiKey: openAIKEY,
     });
   }
 
   async recommendCourses(interests: string): Promise<{ recommendations: string[] }> {
-    if (process.env.USE_MOCK_AI === 'true') {
+    if (this.useMock) {
       return {
         recommendations: [
           `Intro to ${interests}`,
@@ -39,7 +44,7 @@ export class AiService {
   }
 
   async generateSyllabus(topic: string): Promise<{ syllabus: string }> {
-    if (process.env.USE_MOCK_AI === 'true') {
+    if (this.useMock) {
       return {
         syllabus: `Week 1: Introduction to ${topic}\nWeek 2: Core Concepts\nWeek 3: Advanced Topics\n...`,
       };
