@@ -27,7 +27,7 @@ export class EnrollmentController {
   @Get('student/:studentId')
   getStudentEnrollments(@Param('studentId') studentId: string) {
     return this.enrollmentService.getStudentEnrollments(studentId);
-  }
+  } 
 @Get('all-enrollments')
 getAll() {
   return this.enrollmentService.getAllEnrollments();

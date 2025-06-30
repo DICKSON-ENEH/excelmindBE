@@ -17,6 +17,9 @@ import { AssignmentService } from './assignment/assignment.service';
 import { AssignmentController } from './assignment/assignment.controller';
 import { AssignmentModule } from './assignment/assignment.module';
 import { Assignment } from './assignment/assignment.entity';
+import { AiController } from './ai/ai.controller';
+import { AiService } from './ai/ai.service';
+import { AiModule } from './ai/ai.module';
 
 
 @Module({
@@ -42,6 +45,7 @@ import { Assignment } from './assignment/assignment.entity';
     CourseModule,
     EnrollmentModule,
     AssignmentModule,
+    AiModule,
   ],
   controllers: [AppController], 
   providers: [AppService],      
