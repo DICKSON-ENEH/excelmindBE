@@ -20,10 +20,12 @@ import { Assignment } from './assignment/assignment.entity';
 import { AiController } from './ai/ai.controller';
 import { AiService } from './ai/ai.service';
 import { AiModule } from './ai/ai.module';
+import { ConfigModule } from '@nestjs/config';
 
 
 @Module({
   imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
       type: 'postgres',
     host: 'dpg-d1govtili9vc73av48b0-a.oregon-postgres.render.com',
