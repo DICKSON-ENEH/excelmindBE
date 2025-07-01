@@ -14,11 +14,11 @@ export class Assignment {
   student: UserEntity;
 
   @Column({ nullable: true })
-  file: string; // File path or URL
+  file: string; 
 
   @Column({ type: 'text', nullable: true })
-  textSubmission: string; // Alternative to file upload
+  textSubmission: string; 
 
   @Column({ type: 'float', nullable: true })
-  grade: number; // 0 - 100
+  grade: number; 
 }

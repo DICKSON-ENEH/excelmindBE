@@ -27,6 +27,6 @@ export class UserEntity {
 @OneToMany(() => Assignment, (assignment) => assignment.student)
 assignments: Assignment[];
 
-  @OneToMany(() => Enrollment, (enrollment) => enrollment.student) // <-- add this
+  @OneToMany(() => Enrollment, (enrollment) => enrollment.student) 
   enrollments: Enrollment[];
 }

@@ -9,11 +9,11 @@ import { UserEntity } from 'src/users/user.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Enrollment, Course, UserEntity]), // ✅ Register all repositories used
+    TypeOrmModule.forFeature([Enrollment, Course, UserEntity]), 
   ],
   controllers: [EnrollmentController],
   providers: [EnrollmentService],
-  exports: [EnrollmentService], // if used in other modules
+  exports: [EnrollmentService], 
 })
 export class EnrollmentModule {}
  
